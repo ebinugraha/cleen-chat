@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "db:migrate": "prisma migrate dev",
+    "inngest:dev": "npx inngest-cli dev",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write"
@@ -51,6 +52,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.2.3",
     "embla-carousel-react": "^8.6.0",
+    "inngest": "^3.45.1",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.552.0",
     "next": "16.0.1",
