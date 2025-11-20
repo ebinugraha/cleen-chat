@@ -33,10 +33,10 @@ export const AppSidebar = () => {
   return (
     <Sidebar collapsible="icon" className="backdrop-blur-xl bg-sidebar/70">
       {/* HEADER */}
-      <SidebarHeader className="bg-linear-to-r from-primary/10 to-primary/5 border-b">
+      <SidebarHeader className="border-b">
         <SidebarMenuItem>
           <SidebarMenuButton
-            className="gap-x-3 h-10 px-4 hover:bg-primary/10 transition-all"
+            className="gap-x-3 h-10 px-4 transition-all"
             asChild
           >
             <Link href="/" aria-label="Go to home">

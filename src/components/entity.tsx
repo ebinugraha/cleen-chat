@@ -219,7 +219,9 @@ export const EmptyView = ({ message, onNew }: EmptyViewProps) => {
         </EmptyMedia>
       </EmptyHeader>
 
-      <EmptyTitle className="text-lg font-semibold">No Items</EmptyTitle>
+      <EmptyTitle className="text-lg font-semibold">
+        Workflow masih kosong
+      </EmptyTitle>
 
       {message && (
         <EmptyDescription className="text-sm text-muted-foreground">
@@ -229,9 +231,12 @@ export const EmptyView = ({ message, onNew }: EmptyViewProps) => {
 
       {!!onNew && (
         <EmptyContent>
-          <Button className="mt-2 gap-x-2 shadow-sm hover:shadow-md">
+          <Button
+            className="mt-2 gap-x-2 shadow-sm hover:shadow-md"
+            onClick={onNew}
+          >
             <PlusIcon className="size-4" />
-            Add item
+            Buat workflow
           </Button>
         </EmptyContent>
       )}

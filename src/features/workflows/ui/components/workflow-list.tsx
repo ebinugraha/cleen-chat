@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { useWorkflowsParams } from "../../hooks/use-workflows-params";
 import { useEntitySearch } from "@/hooks/use-entity-search";
 import { useDeleteWorkflow } from "../../hooks/use-workflow";
+import { id } from "date-fns/locale";
 
 export const WorkflowSearch = () => {
   const [params, setParams] = useWorkflowsParams();
@@ -47,7 +48,7 @@ export const WorkflowList = () => {
       items={workflows.items}
       getKey={(workflow) => workflow.id}
       renderItem={(workflow) => <WorkflowItem data={workflow} />}
-      emptyView={<p>empty</p>}
+      emptyView={<WorkflowsEmpty />}
     />
   );
 };
@@ -69,9 +70,10 @@ export const WorkflowItem = ({ data }: { data: Workflow }) => {
       isRemoving={removeWorkflow.isPending}
       subtitle={
         <>
-          Update {formatDistanceToNow(data.updatedAt, { addSuffix: true })}{" "}
-          &bull; Created{" "}
-          {formatDistanceToNow(data.updatedAt, { addSuffix: true })}
+          Diubah{" "}
+          {formatDistanceToNow(data.updatedAt, { addSuffix: true, locale: id })}{" "}
+          &bull; Dibuat{" "}
+          {formatDistanceToNow(data.updatedAt, { addSuffix: true, locale: id })}
         </>
       }
       image={
@@ -84,11 +86,11 @@ export const WorkflowItem = ({ data }: { data: Workflow }) => {
 };
 
 export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
-  const createWorklow = useCreateWorkflow();
+  const createWorkflow = useCreateWorkflow();
   const router = useRouter();
 
   const handleCreate = () => {
-    createWorklow.mutate(undefined, {
+    createWorkflow.mutate(undefined, {
       onSuccess: (data) => {
         router.push(`/workflows/${data.id}`);
       },
@@ -102,11 +104,11 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
     <>
       <EntityHeader
         title="Workflows"
-        description="Create and manage your workflows content"
+        description="Buat workflow dan filter konten komentar anda sesuka hati"
         onNew={handleCreate}
         newButtonLabel="New Workflow"
         disabled={disabled}
-        isCreating={createWorklow.isPending}
+        isCreating={createWorkflow.isPending}
       />
     </>
   );
@@ -140,11 +142,11 @@ export const WorkflowsEmpty = () => {
 
   const handleCreate = () => {
     createWorkflow.mutate(undefined, {
-      onError: (error) => {
-        toast("error");
-      },
       onSuccess: (data) => {
         router.push(`/workflows/${data.id}`);
+      },
+      onError: (error) => {
+        toast.error("error");
       },
     });
   };
@@ -153,7 +155,7 @@ export const WorkflowsEmpty = () => {
     <>
       <EmptyView
         onNew={handleCreate}
-        message="You haven't created any workflows"
+        message={`Kamu belum membuat workflow\nklik tombol di bawah untuk membuat workflow`}
       />
     </>
   );
