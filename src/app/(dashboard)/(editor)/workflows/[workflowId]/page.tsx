@@ -1,5 +1,5 @@
-import { Editor } from "@/features/ editor/ui/components/editor";
-import { EditorHeader } from "@/features/ editor/ui/components/editor-header";
+import { Editor } from "@/features/editor/ui/components/editor";
+import { EditorHeader } from "@/features/editor/ui/components/editor-header";
 import { prefetchWorkflow } from "@/features/workflows/server/prefetch";
 import { requireAuth } from "@/lib/auth-utils";
 import { HydrateClient } from "@/trpc/server";
