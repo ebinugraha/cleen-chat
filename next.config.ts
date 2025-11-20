@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
    *
    * @returns melakukan redirect paksa jika ada yang mengakses halaman '/'
    */
+  devIndicators: false,
   async redirects() {
     return [
       {

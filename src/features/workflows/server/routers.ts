@@ -122,4 +122,28 @@ export const workflowRouter = createTRPCRouter({
         hasPrevPage,
       };
     }),
+
+  /**
+   * @returns workflowGetOne
+   */
+  getOne: protectedProcedure
+    .input(
+      z.object({
+        workflowId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { workflowId } = input;
+      const workflow = await prisma.workflow.findUniqueOrThrow({
+        where: {
+          id: workflowId,
+          userId: ctx.auth.user.id,
+        },
+      });
+
+      return {
+        id: workflow.id,
+        name: workflow.name,
+      };
+    }),
 });
