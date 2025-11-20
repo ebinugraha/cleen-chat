@@ -1,8 +1,9 @@
 import { PAGINATION } from "@/config/constant";
+import { NodeType } from "@/generated/prisma/enums";
 import prisma from "@/lib/db";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
-import { Search } from "lucide-react";
 import { generateSlug } from "random-word-slugs";
+import type { Node, Edge } from "@xyflow/react";
 import z from "zod";
 
 export const workflowRouter = createTRPCRouter({
@@ -16,6 +17,13 @@ export const workflowRouter = createTRPCRouter({
       data: {
         name: generateSlug(3),
         userId: ctx.auth.user.id,
+        nodes: {
+          create: {
+            type: NodeType.INTITAL,
+            position: { x: 0, y: 0 },
+            name: NodeType.INTITAL,
+          },
+        },
       },
     });
   }),
@@ -134,16 +142,39 @@ export const workflowRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const { workflowId } = input;
+
       const workflow = await prisma.workflow.findUniqueOrThrow({
         where: {
           id: workflowId,
           userId: ctx.auth.user.id,
         },
+        include: {
+          nodes: true,
+          connections: true,
+        },
       });
+
+      // Mengubah node menjadi kompatibel dengan reactFLow
+      const nodes: Node[] = workflow.nodes.map((node) => ({
+        id: node.id,
+        type: node.type,
+        position: node.position as { x: number; y: number },
+        data: (node.data as Record<string, unknown>) || {},
+      }));
+
+      const edges: Edge[] = workflow.connections.map((connection) => ({
+        id: connection.id,
+        source: connection.fromNodeId,
+        target: connection.toNodeId,
+        sourceHandle: connection.fromOutput,
+        targetHandle: connection.toInput,
+      }));
 
       return {
         id: workflow.id,
         name: workflow.name,
+        nodes,
+        edges,
       };
     }),
 });
