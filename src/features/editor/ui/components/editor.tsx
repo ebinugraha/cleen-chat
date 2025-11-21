@@ -21,9 +21,13 @@ import "@xyflow/react/dist/style.css";
 import { useSuspenseWorkflow } from "@/features/workflows/hooks/use-workflow";
 import { AddNoteButton } from "./add-node-button";
 import { nodeComponents } from "@/config/node-components";
+import { useSetAtom } from "jotai";
+import { editorAtom } from "../../atoms";
 
 export const Editor = ({ workflowId }: { workflowId: string }) => {
   const { data: workflow } = useSuspenseWorkflow({ workflowId });
+
+  const setWorkflow = useSetAtom(editorAtom);
 
   const [nodes, setNodes] = useState<Node[]>(workflow.nodes);
   const [edges, setEdges] = useState<Edge[]>(workflow.edges);
@@ -60,6 +64,7 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
         snapGrid={[10, 10]}
         nodeTypes={nodeComponents}
         snapToGrid
+        onInit={setWorkflow}
         panOnScroll
         panOnDrag={false}
         selectionOnDrag

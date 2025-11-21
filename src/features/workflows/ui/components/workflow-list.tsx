@@ -95,7 +95,7 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
         router.push(`/workflows/${data.id}`);
       },
       onError: (error) => {
-        toast.error("error");
+        toast.error(`Error ${error.message}`);
       },
     });
   };
