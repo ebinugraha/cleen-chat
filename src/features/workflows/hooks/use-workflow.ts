@@ -121,3 +121,30 @@ export const useUpdateWorkflowName = () => {
     })
   );
 };
+
+/**
+ * Hook untuk menghubah/menyimpan perubahan workflows
+ * @returns update mutation
+ */
+
+export const useUpdateWorkflow = () => {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    trpc.workflows.update.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(`Workflow "${data.name}" berhasil disimpan`);
+        await queryClient.invalidateQueries(
+          trpc.workflows.getMany.queryOptions({})
+        );
+        await queryClient.invalidateQueries(
+          trpc.workflows.getOne.queryFilter({ workflowId: data.id })
+        );
+      },
+      onError: (error) => {
+        toast.error(`Failed to save workflow : ${error.message}`);
+      },
+    })
+  );
+};

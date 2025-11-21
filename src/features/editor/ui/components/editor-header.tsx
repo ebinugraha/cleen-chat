@@ -12,16 +12,37 @@ import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import {
   useSuspenseWorkflow,
+  useUpdateWorkflow,
   useUpdateWorkflowName,
 } from "@/features/workflows/hooks/use-workflow";
+import { useAtomValue } from "jotai";
 import { SaveIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { editorAtom } from "../../atoms";
 
-export const EditorSaveButton = () => {
+export const EditorSaveButton = ({ workflowId }: { workflowId: string }) => {
+  const editor = useAtomValue(editorAtom);
+  const saveWorkflow = useUpdateWorkflow();
+
+  const handleSave = () => {
+    if (!editor) {
+      return;
+    }
+
+    const edges = editor.getEdges();
+    const nodes = editor.getNodes();
+
+    saveWorkflow.mutate({
+      id: workflowId,
+      nodes: nodes,
+      edges: edges,
+    });
+  };
+
   return (
     <div>
-      <Button size="sm">
+      <Button size="sm" onClick={handleSave} disabled={saveWorkflow.isPending}>
         <SaveIcon size={2} />
         Simpan
       </Button>
@@ -123,7 +144,7 @@ export const EditorHeader = ({ workflowId }: { workflowId: string }) => {
       <SidebarTrigger />
       <div className="flex flex-row items-center justify-between gap-x-4 w-full">
         <EditorBreadcumb workflowId={workflowId} />
-        <EditorSaveButton />
+        <EditorSaveButton workflowId={workflowId} />
       </div>
     </div>
   );

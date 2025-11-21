@@ -110,9 +110,10 @@ enum CredentialType {
 }
 
 enum NodeType {
-  INTITAL
+  INITIAL
+  FACEBOOK_TRIGGER
   MANUAL_TRIGGER
-  HTTP_REQUEST
+  JUDOL_DETECTOR
 }
 model Node {
   id String @id @default(cuid())
